@@ -12,7 +12,11 @@
 $ termrun
 ```
 
+Requires `sudo` each time unless root is set as owner
+
 ### Example
+
+TODO: insert gif/ascii video
 
 ```shell
 $ termrun /dev/pts/2 ls
