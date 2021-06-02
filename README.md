@@ -12,7 +12,7 @@
 $ termrun
 ```
 
-Requires `sudo` each time unless root is set as owner
+Requires `sudo` each time unless root is set as owner. See privileges section below
 
 ### Example
 
@@ -43,6 +43,8 @@ $ cargo install --path path/to/repo
 ```
 
 This should make `termrun` available everywhere assuming your cargo crates are in `$PATH`
+
+### Privileges
 
 
 ## License

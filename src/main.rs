@@ -1,78 +1,58 @@
-use std::convert::TryInto;
-use std::os::unix::prelude::*;
 use std::{env, ffi, fs, process};
 
 use libc;
 use nix;
+use anyhow::{anyhow, Result};
 
-use error::CliError;
+use ops::Op;
 
-mod error;
+mod ops;
 
-enum Op {
-    SingleTerm(ffi::OsString, Vec<ffi::OsString>, bool),
-}
-
-fn parse_args(mut args: env::ArgsOs) -> Result<Op, CliError> {
-    if args.len() < 3 {
-        println!("{}", USAGE);
-        process::exit(1);
-    }
-
-    args.next().unwrap(); // cmd name
-
-    let tty = args.next().expect("Did not understand specified terminal");
-
-    let cmd = args.collect::<Vec<ffi::OsString>>();
-
-    Ok(Op::SingleTerm(tty, cmd, false))
-}
+static VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 static USAGE: &str = "(TODO) Incorrect usage"; // TODO
 
-fn tty_write(fd: RawFd, strings: Vec<ffi::OsString>, newline: bool) -> Result<(), CliError> {
-    nix::ioctl_write_ptr_bad!(inner_tty_write, libc::TIOCSTI, libc::c_char);
+fn parse_args(mut args: Vec<ffi::OsString>) -> Result<Op> {
+    println!("args: {:?}", args);
 
-    for string in strings {
-        let string_len = string.len();
-        let string_in_c = ffi::CString::new(string.into_vec())?;
-        let string_ptr = string_in_c.as_ptr();
-
-        for i in 0..string_len {
-            let ii: isize = i.try_into().or(Err(CliError::TooLongCmd))?; // TODO
-            unsafe { inner_tty_write(fd, string_ptr.offset(ii) as *const _) }?;
+    if args.len() < 2 {
+        return Ok(Op::Interactive);
+    } else if args.len() == 2 {
+        let opt = &args[1];
+        return if opt == "--help" || opt == "-h" {
+            Ok(Op::Help)
+        } else if opt == "--version" || opt == "-v" {
+            Ok(Op::Version)
+        } else if opt == "--interactive" || opt == "-i" {
+            Ok(Op::Interactive)
+        } else {
+            Err(anyhow::anyhow!("Did not understand passed in arg"))
         }
-
-        let nl = ffi::CString::new(" ")?;
-        unsafe { inner_tty_write(fd, nl.as_ptr() as *const _) }?;
     }
 
-    if newline {
-        let nl = ffi::CString::new("\n")?;
-        unsafe { inner_tty_write(fd, nl.as_ptr() as *const _) }?;
-    }
+    let tty = args.remove(1);
+    let cmd = args.drain(1..).collect();
 
-    Ok(())
+    Ok(Op::Single(tty, cmd, false))
 }
 
 fn main() {
-    match parse_args(env::args_os()) {
+    match parse_args(env::args_os().collect()) {
         Err(err) => {
             println!("Error: {:?}", err);
             println!("{}", USAGE);
             process::exit(1);
         }
-
-        Ok(Op::SingleTerm(tty_path, cmd, newline)) => {
-            let tty_file = fs::OpenOptions::new()
-                .read(true)
-                .write(true)
-                .open(tty_path)
-                .expect("Did not understand specified tty");
-
-            let tty_fd: RawFd = tty_file.as_raw_fd();
-
-            if let Err(err) = tty_write(tty_fd, cmd, newline) {
+        Ok(Op::Help) => {
+            println!("{}", USAGE);
+        }
+        Ok(Op::Version) => {
+            println!("{}", VERSION);
+        }
+        Ok(Op::Interactive) => if let Err(err) = ops::interactive() {},
+        Ok(Op::All(cmd, newline)) => if let Err(err) = ops::all(cmd, newline) {},
+        Ok(Op::Single(pty_path, cmd, newline)) => {
+            if let Err(err) = ops::single(pty_path.into(), cmd, newline) {
                 println!("Error: {:?}", err);
                 process::exit(1);
             }
