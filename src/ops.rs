@@ -4,6 +4,7 @@ use std::{env, ffi, fs, path, process};
 
 use anyhow::{anyhow, Context, Result};
 
+#[derive(Debug, PartialEq)]
 pub enum Op {
     Single(ffi::OsString, Vec<ffi::OsString>, bool),
     All(Vec<ffi::OsString>, bool),

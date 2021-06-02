@@ -40,7 +40,6 @@ fn parse_args(mut args: Vec<ffi::OsString>) -> Result<Op> {
     let mut single_pty_path: Option<ffi::OsString> = None;
 
     let mut arg_deque = VecDeque::from(args);
-    println!("args: {:?}", arg_deque);
 
     let mut arg_pop = arg_deque.pop_front();
     while arg_pop.is_some() {
@@ -69,11 +68,6 @@ fn parse_args(mut args: Vec<ffi::OsString>) -> Result<Op> {
 
         arg_pop = arg_deque.pop_front();
     }
-
-    println!(
-        "About to run: {:?} {:?} {}",
-        single_pty_path, arg_deque, newline
-    );
 
     if single_pty {
         if all_ptys {
@@ -125,7 +119,23 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    macro_rules! vec_into {
+        ($($x:expr),+ $(,)?) => (
+            vec![$($x.into()),+]
+        );
+    }
 
     #[test]
-    fn test_parse_args() {}
+    fn test_parse_args() {
+        assert_eq!(
+            parse_args(vec_into!["termrun", "--pty", "/dev/pts/2", "echo", "hello", "world"]).unwrap(),
+            Op::Single(
+                "/dev/pts/2".into(),
+                vec_into!["echo", "hello", "world"],
+                false
+            )
+        );
+    }
 }
