@@ -1,7 +1,7 @@
 <div align="center">
 	<h1>termrun</h1>
 	<p>
-        Run a command in another terminal (or all of them)
+        Run a command in other Unix terminals!
 	</p>
 	<br>
 </div>
@@ -12,11 +12,10 @@
 $ termrun
 ```
 
-Requires `sudo` each time unless root is set as owner. See privileges section below
+__Note__: Requires `sudo` each time unless root is set as owner. See Privileges section below
 
 ### Example
 
-TODO: insert gif/ascii video
 
 ```shell
 $ termrun /dev/pts/2 ls
@@ -44,8 +43,23 @@ $ cargo install --path path/to/repo
 
 This should make `termrun` available everywhere assuming your cargo crates are in `$PATH`
 
-### Privileges
+### Privileges / Post-installation
 
+`termrun` uses `ioctl(2)` under the hood through the [TIOCSTI](https://man7.org/linux/man-pages/man4/tty_ioctl.4.html) cmd flag. To do this successfully, the process needs root user privileges to run.
+
+In practice, this means having to run `termrun` with `sudo`. By default when you install global crates, sudo doesn't know about them:
+
+```shell
+$ sudo termrun
+[sudo] password for user: 
+sudo: termrun: command not found
+```
+
+The solutions here are to:
+
+- (Easiest) Symlink `termrun` into a `sudo`-friendly path: `sudo ln -s ~/.cargo/bin/termrun /usr/local/bin/`
+- Always specify the complete crate path so `sudo` can find `termrun`: `sudo ~/.cargo/bin/termrun`
+- Specify `sudo` to use your `$PATH`: `sudo env "PATH=$PATH" termrun`
 
 ## License
 
