@@ -6,6 +6,7 @@ use anyhow::anyhow;
 
 use crate::ops::Op;
 
+// This is gross but works for now; deserves a refactoring
 pub fn parse_args(mut args: Vec<ffi::OsString>) -> anyhow::Result<Op> {
     if args.len() < 2 {
         return Ok(Op::Help);
@@ -144,6 +145,21 @@ mod tests {
         assert_eq!(
             parse_args(vec_into!["termrun", "-v"]).unwrap(),
             Op::Version
+        );
+
+        assert_eq!(
+            parse_args(vec_into!["termrun"]).unwrap(),
+            Op::Help
+        );
+
+        assert_eq!(
+            parse_args(vec_into!["termrun", "--help"]).unwrap(),
+            Op::Help
+        );
+
+        assert_eq!(
+            parse_args(vec_into!["termrun", "-h"]).unwrap(),
+            Op::Help
         );
 
         assert!(parse_args(vec_into!["termrun", "ls"]).is_err());
