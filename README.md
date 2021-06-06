@@ -1,7 +1,7 @@
 <div align="center">
 	<h1>termrun</h1>
 	<p>
-        Run a command in other Unix terminals!
+        Send a command to opened Unix terminals!
 	</p>
 	<br>
 </div>
@@ -14,14 +14,28 @@ $ termrun
 
 __Note__: Requires `sudo` each time unless root is set as owner. See Privileges section below
 
-### Example
+### Quick example
 
-
+Terminal 1:
 ```shell
-$ termrun /dev/pts/2 ls
+$ tty
+/dev/pts/2
 ```
 
-### Flags
+Terminal 2:
+```shell
+$ termrun --newline --pty /dev/pts/2 echo hello world 
+```
+
+(`--newline` appends `\n` to the sent command to actually run)
+
+Terminal 1:
+```shell
+$ tty
+/dev/pts/2
+$ echo hello world 
+hello world 
+```
 
 ## Install
 
