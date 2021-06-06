@@ -1,8 +1,15 @@
 [package]
 name = "termrun"
 version = "0.1.0"
-authors = ["Milan Landaverde <milanlandaverde@gmail.com>"]
+authors = ["Milan <milanlandaverde@gmail.com>"]
 edition = "2018"
+homepage = "https://github.com/mdaverde/termrun"
+repository = "https://github.com/mdaverde/termrun"
+license = "MIT"
+readme = "README.md"
+description = "Send & run commands on other open Unix terminals"
+categories = ["command-line-utilities"]
+keywords = ["cli", "unix", "terminal", "config"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

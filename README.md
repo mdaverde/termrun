@@ -1,7 +1,7 @@
 <div align="center">
 	<h1>termrun</h1>
 	<p>
-        Send a command to opened Unix terminals!
+        Send & run commands on other open Unix terminals
 	</p>
 	<br>
 </div>

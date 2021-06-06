@@ -8,7 +8,7 @@ mod parse;
 static VERSION: &str = env!("CARGO_PKG_VERSION");
 
 // TODO
-static USAGE: &str = "termrun - send a command to other open Unix terminals";
+static USAGE: &str = "termrun - send & run commands on other open Unix terminals";
 
 fn main() {
     match parse::parse_args(env::args_os().collect()) {
