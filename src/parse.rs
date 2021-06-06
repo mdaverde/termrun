@@ -38,6 +38,9 @@ pub fn parse_args(mut args: Vec<ffi::OsString>) -> anyhow::Result<Op> {
         let arg = arg_pop.unwrap();
 
         if collect_pty_arg {
+            if arg.as_bytes().starts_with(b"-") {
+               return Err(anyhow!("Did not understand specified --pty"));
+            }
             single_pty_path = Some(arg);
             collect_pty_arg = false;
         } else {
@@ -113,5 +116,37 @@ mod tests {
                 false
             )
         );
+
+        assert_eq!(
+            parse_args(vec_into![CMD_NAME, "-p", "/dev/pts/2", "ls"]).unwrap(),
+            Op::Single("/dev/pts/2".into(), vec_into!["ls"], false)
+        );
+
+        assert_eq!(
+            parse_args(vec_into![CMD_NAME, "--all", "ls",]).unwrap(),
+            Op::All(vec_into!["ls"], false)
+        );
+
+        assert_eq!(
+            parse_args(vec_into![CMD_NAME, "--newline", "--all", "ls"]).unwrap(),
+            Op::All(vec_into!["ls"], true)
+        );
+
+        assert_eq!(
+            parse_args(vec_into![CMD_NAME, "-n", "-a", "ls"]).unwrap(),
+            Op::All(vec_into!["ls"], true)
+        );
+
+        assert!(parse_args(vec_into![CMD_NAME, "ls"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "ls", "--newline"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "--pty"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "--pty", "ls"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "--all"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "-p", "-a"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "-p", "-a", "ls"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "-n", "-a"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "--new", "-a"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "-n", "-p"]).is_err());
+        assert!(parse_args(vec_into![CMD_NAME, "--newline", "-p"]).is_err());
     }
 }
