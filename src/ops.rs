@@ -1,6 +1,6 @@
 use std::convert::TryInto;
 use std::os::unix::prelude::*;
-use std::{env, ffi, fs, path, process};
+use std::{ffi, fs, path};
 
 use anyhow::{anyhow, Context, Result};
 
