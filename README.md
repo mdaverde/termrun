@@ -1,12 +1,8 @@
-<div align="center">
-	<h1>termrun</h1>
-	<p>
-        Send & run commands on other open Unix terminals
-	</p>
-	<br>
-</div>
+# termrun
 
-## Usage
+## Send & run commands on other open Unix terminals
+
+### Usage
 
 ```shell
 $ termrun
@@ -37,9 +33,9 @@ $ echo hello world
 hello world 
 ```
 
-## Install
+### Install
 
-### Cargo
+#### Cargo
 
 If you're using a recent version of Cargo, you can see the `cargo install` command:
 
@@ -47,7 +43,7 @@ If you're using a recent version of Cargo, you can see the `cargo install` comma
 $ cargo install termrun 
 ```
 
-### Build from source
+#### Build from source
 
 After git cloning this repo, you can install as a cargo crate through
 
@@ -57,7 +53,7 @@ $ cargo install --path path/to/repo
 
 This should make `termrun` available everywhere assuming your cargo crates are in `$PATH`
 
-### Privileges / Post-installation
+#### Privileges / Post-installation
 
 `termrun` uses `ioctl(2)` under the hood through the [TIOCSTI](https://man7.org/linux/man-pages/man4/tty_ioctl.4.html) cmd flag. To do this successfully, the process needs root user privileges to run.
 
@@ -78,7 +74,7 @@ The solutions here are to:
 - Always specify the complete crate path so `sudo` can find `termrun`: `sudo ~/.cargo/bin/termrun`
 - Specify `sudo` to use your `$PATH`: `sudo env "PATH=$PATH" termrun`
 
-## License
+### License
 
 MIT - Maintained by [Milan](https://mdaverde.com)
 

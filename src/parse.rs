@@ -39,7 +39,7 @@ pub fn parse_args(mut args: Vec<ffi::OsString>) -> anyhow::Result<Op> {
 
         if collect_pty_arg {
             if arg.as_bytes().starts_with(b"-") {
-               return Err(anyhow!("Did not understand specified --pty"));
+                return Err(anyhow!("Did not understand specified --pty"));
             }
             single_pty_path = Some(arg);
             collect_pty_arg = false;
@@ -142,25 +142,16 @@ mod tests {
             Op::Version
         );
 
-        assert_eq!(
-            parse_args(vec_into!["termrun", "-v"]).unwrap(),
-            Op::Version
-        );
+        assert_eq!(parse_args(vec_into!["termrun", "-v"]).unwrap(), Op::Version);
 
-        assert_eq!(
-            parse_args(vec_into!["termrun"]).unwrap(),
-            Op::Help
-        );
+        assert_eq!(parse_args(vec_into!["termrun"]).unwrap(), Op::Help);
 
         assert_eq!(
             parse_args(vec_into!["termrun", "--help"]).unwrap(),
             Op::Help
         );
 
-        assert_eq!(
-            parse_args(vec_into!["termrun", "-h"]).unwrap(),
-            Op::Help
-        );
+        assert_eq!(parse_args(vec_into!["termrun", "-h"]).unwrap(), Op::Help);
 
         assert!(parse_args(vec_into!["termrun", "ls"]).is_err());
         assert!(parse_args(vec_into!["termrun", "ls", "--newline"]).is_err());
