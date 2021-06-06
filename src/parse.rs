@@ -5,6 +5,7 @@ use std::os::unix::prelude::*;
 use anyhow::anyhow;
 
 use crate::ops::Op;
+use crate::CMD_NAME;
 
 pub fn parse_args(mut args: Vec<ffi::OsString>) -> anyhow::Result<Op> {
     if args.len() < 2 {
@@ -98,7 +99,7 @@ mod tests {
     fn test_parse_args() {
         assert_eq!(
             parse_args(vec_into![
-                "termrun",
+                CMD_NAME,
                 "--pty",
                 "/dev/pts/2",
                 "echo",

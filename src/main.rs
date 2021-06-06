@@ -5,7 +5,9 @@ use ops::Op;
 mod ops;
 mod parse;
 
-static VERSION: &'static str = env!("CARGO_PKG_VERSION");
+static CMD_NAME: &str = "termrun";
+
+static VERSION: &str = env!("CARGO_PKG_VERSION");
 
 static USAGE: &str = "(TODO) Incorrect usage"; // TODO
 
