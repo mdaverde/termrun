@@ -19,7 +19,7 @@ pub fn parse_args(mut args: Vec<ffi::OsString>) -> anyhow::Result<Op> {
         } else if opt == "--interactive" || opt == "-i" {
             Ok(Op::Interactive)
         } else {
-            Err(anyhow!("Did not understand passed in args"))
+            Err(anyhow!("Unknown or incomplete args"))
         };
     }
 

@@ -2,6 +2,8 @@
 
 ## Send & run commands on other open Unix terminals
 
+Useful when making configuration changes that you want other terminals to pick up with `source`
+
 ### Usage
 
 ```shell
