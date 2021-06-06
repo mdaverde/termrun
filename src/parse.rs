@@ -7,8 +7,6 @@ use anyhow::anyhow;
 use crate::ops::Op;
 
 pub fn parse_args(mut args: Vec<ffi::OsString>) -> anyhow::Result<Op> {
-    println!("args: {:?}", args);
-
     if args.len() < 2 {
         return Ok(Op::Interactive);
     } else if args.len() == 2 {

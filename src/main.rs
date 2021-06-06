@@ -2,8 +2,8 @@ use std::{env, process};
 
 use ops::Op;
 
-mod parse;
 mod ops;
+mod parse;
 
 static VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
@@ -24,7 +24,7 @@ fn main() {
         }
         Ok(Op::Interactive) => if let Err(_err) = ops::interactive() {},
         Ok(Op::All(cmd, newline)) => {
-            if let Err(_err) = ops::all(cmd, newline) {
+            if let Err(err) = ops::all(cmd, newline) {
                 println!("Error: {:?}", err);
                 process::exit(1);
             }
