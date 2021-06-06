@@ -64,6 +64,9 @@ This should make `termrun` available everywhere assuming your cargo crates are i
 In practice, this means having to run `termrun` with `sudo`. By default when you install global crates, sudo doesn't know about them:
 
 ```shell
+$ termrun
+Error: EPERM: Operation not permitted
+
 $ sudo termrun
 [sudo] password for user: 
 sudo: termrun: command not found

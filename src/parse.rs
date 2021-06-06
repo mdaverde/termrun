@@ -5,11 +5,10 @@ use std::os::unix::prelude::*;
 use anyhow::anyhow;
 
 use crate::ops::Op;
-use crate::CMD_NAME;
 
 pub fn parse_args(mut args: Vec<ffi::OsString>) -> anyhow::Result<Op> {
     if args.len() < 2 {
-        return Ok(Op::Interactive);
+        return Ok(Op::Help);
     } else if args.len() == 2 {
         let opt = &args[1];
         return if opt == "--help" || opt == "-h" {
