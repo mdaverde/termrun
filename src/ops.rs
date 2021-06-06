@@ -13,7 +13,7 @@ pub enum Op {
     Version,
 }
 
-fn pty_input_ffi(cmd: Vec<ffi::OsString>, newline: bool) -> Result<ffi::CString> {
+fn pty_create_input_string(cmd: Vec<ffi::OsString>, newline: bool) -> Result<ffi::CString> {
     let mut input: Vec<u8> = vec![];
 
     let len = cmd.len();
@@ -75,7 +75,7 @@ pub fn interactive() -> Result<()> {
 
 pub fn all(cmd: Vec<ffi::OsString>, newline: bool) -> Result<()> {
     let ptys = get_all_ptys()?;
-    let pty_input = pty_input_ffi(cmd, newline)?;
+    let pty_input = pty_create_input_string(cmd, newline)?;
 
     for Pty(pty_path) in ptys {
         let pty_file = fs::OpenOptions::new()
@@ -90,7 +90,7 @@ pub fn all(cmd: Vec<ffi::OsString>, newline: bool) -> Result<()> {
 }
 
 pub fn single(pty_path: path::PathBuf, cmd: Vec<ffi::OsString>, newline: bool) -> Result<()> {
-    let pty_input = pty_input_ffi(cmd, newline)?;
+    let pty_input = pty_create_input_string(cmd, newline)?;
     let pty_file = fs::OpenOptions::new()
         .read(true)
         .write(true)
@@ -105,7 +105,7 @@ mod test {
 
     #[test]
     fn test_pty_input() {
-        let c_str = pty_input_ffi(
+        let c_str = pty_create_input_string(
             vec![
                 ffi::OsString::from("echo"),
                 ffi::OsString::from("hello"),
