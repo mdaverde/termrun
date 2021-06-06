@@ -33,6 +33,13 @@ $ echo hello world
 hello world 
 ```
 
+### Reload all terminals example
+
+```shell
+$ vim ~/.zshrc # make config changes
+$ termrun --newline --all source ~/.zshrc
+```
+
 ### Install
 
 #### Cargo
