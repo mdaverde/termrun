@@ -102,7 +102,7 @@ mod tests {
     fn test_parse_args() {
         assert_eq!(
             parse_args(vec_into![
-                CMD_NAME,
+                "termrun",
                 "--pty",
                 "/dev/pts/2",
                 "echo",
@@ -118,35 +118,45 @@ mod tests {
         );
 
         assert_eq!(
-            parse_args(vec_into![CMD_NAME, "-p", "/dev/pts/2", "ls"]).unwrap(),
+            parse_args(vec_into!["termrun", "-p", "/dev/pts/2", "ls"]).unwrap(),
             Op::Single("/dev/pts/2".into(), vec_into!["ls"], false)
         );
 
         assert_eq!(
-            parse_args(vec_into![CMD_NAME, "--all", "ls",]).unwrap(),
+            parse_args(vec_into!["termrun", "--all", "ls",]).unwrap(),
             Op::All(vec_into!["ls"], false)
         );
 
         assert_eq!(
-            parse_args(vec_into![CMD_NAME, "--newline", "--all", "ls"]).unwrap(),
+            parse_args(vec_into!["termrun", "--newline", "--all", "ls"]).unwrap(),
             Op::All(vec_into!["ls"], true)
         );
 
         assert_eq!(
-            parse_args(vec_into![CMD_NAME, "-n", "-a", "ls"]).unwrap(),
+            parse_args(vec_into!["termrun", "-n", "-a", "ls"]).unwrap(),
             Op::All(vec_into!["ls"], true)
         );
 
-        assert!(parse_args(vec_into![CMD_NAME, "ls"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "ls", "--newline"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "--pty"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "--pty", "ls"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "--all"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "-p", "-a"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "-p", "-a", "ls"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "-n", "-a"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "--new", "-a"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "-n", "-p"]).is_err());
-        assert!(parse_args(vec_into![CMD_NAME, "--newline", "-p"]).is_err());
+        assert_eq!(
+            parse_args(vec_into!["termrun", "--version"]).unwrap(),
+            Op::Version
+        );
+
+        assert_eq!(
+            parse_args(vec_into!["termrun", "-v"]).unwrap(),
+            Op::Version
+        );
+
+        assert!(parse_args(vec_into!["termrun", "ls"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "ls", "--newline"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "--pty"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "--pty", "ls"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "--all"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "-p", "-a"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "-p", "-a", "ls"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "-n", "-a"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "--new", "-a"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "-n", "-p"]).is_err());
+        assert!(parse_args(vec_into!["termrun", "--newline", "-p"]).is_err());
     }
 }
