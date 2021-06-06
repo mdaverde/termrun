@@ -5,27 +5,27 @@
 ### Usage
 
 ```shell
-$ termrun
+$ termrun [--newline] [--all|--pty /dev/pty/N] cmd
 ```
 
 __Note__: Requires `sudo` each time unless root is set as owner. See Privileges section below
 
-### Quick example
+### Simple example
 
-Terminal 1:
+Open terminal 1:
 ```shell
 $ tty
 /dev/pts/2
 ```
 
-Terminal 2:
+Open terminal 2:
 ```shell
 $ termrun --newline --pty /dev/pts/2 echo hello world 
 ```
 
-(`--newline` appends `\n` to the sent command to actually run)
+`--newline` appends `\n` to the sent command to actually run
 
-Terminal 1:
+Displayed in open terminal 1:
 ```shell
 $ tty
 /dev/pts/2
