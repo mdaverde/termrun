@@ -5,11 +5,10 @@ use ops::Op;
 mod ops;
 mod parse;
 
-static CMD_NAME: &str = "termrun";
-
 static VERSION: &str = env!("CARGO_PKG_VERSION");
 
-static USAGE: &str = "(TODO) Incorrect usage"; // TODO
+// TODO
+static USAGE: &str = "termrun - send a command to other open Unix terminals";
 
 fn main() {
     match parse::parse_args(env::args_os().collect()) {
