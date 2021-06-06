@@ -23,7 +23,12 @@ fn main() {
             println!("{}", VERSION);
         }
         Ok(Op::Interactive) => if let Err(_err) = ops::interactive() {},
-        Ok(Op::All(cmd, newline)) => if let Err(_err) = ops::all(cmd, newline) {},
+        Ok(Op::All(cmd, newline)) => {
+            if let Err(_err) = ops::all(cmd, newline) {
+                println!("Error: {:?}", err);
+                process::exit(1);
+            }
+        }
         Ok(Op::Single(pty_path, cmd, newline)) => {
             if let Err(err) = ops::single(pty_path.into(), cmd, newline) {
                 println!("Error: {:?}", err);
